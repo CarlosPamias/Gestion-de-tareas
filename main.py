@@ -50,28 +50,29 @@ class Ventana(Frame):
         Label(self.frame_uno, text='Agregar y actualizad datos', bg='white', fg='black',
             font=('Kaufmann BT', '13', 'bold')).grid(columnspan=2,column=0,row=0,pady=5)
         
+        Label(self.frame_uno, text= 'Descripción', fg='black',bg= 'white',
+            font=('Rockwell',13,'bols')).grid(column=0,row=4,pady=5)
         Label(self.frame_uno, text= 'Tematica', fg='black',bg= 'white',
             font=('Rockwell',13,'bols')).grid(column=0,row=1,pady=5)
         Label(self.frame_uno, text= 'Academia', fg='black',bg= 'white',
             font=('Rockwell',13,'bols')).grid(column=0,row=2,pady=5)
         Label(self.frame_uno, text= 'Prioridad', fg='black',bg= 'white',
             font=('Rockwell',13,'bols')).grid(column=0,row=3,pady=5)
-        Label(self.frame_uno, text= 'Descripción', fg='black',bg= 'white',
-            font=('Rockwell',13,'bols')).grid(column=0,row=4,pady=5)
         Label(self.frame_uno, text= 'Fecha inicio', fg='black',bg= 'white',
             font=('Rockwell',13,'bols')).grid(column=0,row=5,pady=5)
         Label(self.frame_uno, text= 'Fecha Fin', fg='black',bg= 'white',
             font=('Rockwell',13,'bols')).grid(column=0,row=6,pady=5)    
 
 #creamos las cajas de entrada de la informacion
+        Entry(self.frame_uno, textvariable=self.descripcion, font=('Comic Sans MS', 12),
+              highlightbackground='white',highlightthickness=5).grid(colum=1,row=4)
         Entry(self.frame_uno, textvariable=self.tematica, font=('Comic Sans MS', 12),
               highlightbackground='white',highlightthickness=5).grid(colum=1,row=1)
         Entry(self.frame_uno, textvariable=self.academia, font=('Comic Sans MS', 12),
               highlightbackground='white',highlightthickness=5).grid(colum=1,row=2)
         Entry(self.frame_uno, textvariable=self.prioridad, font=('Comic Sans MS', 12),
               highlightbackground='white',highlightthickness=5).grid(colum=1,row=3)
-        Entry(self.frame_uno, textvariable=self.descripcion, font=('Comic Sans MS', 12),
-              highlightbackground='white',highlightthickness=5).grid(colum=1,row=4)
+
         Entry(self.frame_uno, textvariable=self.fecha_inicio, font=('Comic Sans MS', 12),
               highlightbackground='white',highlightthickness=5).grid(colum=1,row=5)
         Entry(self.frame_uno, textvariable=self.fecha_fin_prevista, font=('Comic Sans MS', 12),
@@ -96,11 +97,12 @@ class Ventana(Frame):
         ladoy.grid(column=1,row=0,sticky='ns')
         self.tabla.configure(xscrollcommand= ladox.set, yscrollcommand= ladoy.set)
 
-        self.tabla['columns'] = ('Academia','Prioridad','Descripción','Fecha inicio','Fecha fin')
+        self.tabla['columns'] = ('Descripción','Academia','Prioridad','Fecha inicio','Fecha fin')
         self.tabla.column('#0', minwidth='100',width=120, anchor='center')
+        self.tabla.column('Descripcion', minwidth='100',width=120, anchor='center')
         self.tabla.column('Academia', minwidth='100',width=120, anchor='center')
         self.tabla.column('Prioridad', minwidth='100',width=120, anchor='center')
-        self.tabla.column('Descripcion', minwidth='100',width=120, anchor='center')
+      
         self.tabla.column('Fecha inicio', minwidth='100',width=120, anchor='center')
         self.tabla.column('Fecha fin', minwidth='100',width=120, anchor='center')
 
@@ -118,9 +120,9 @@ class Ventana(Frame):
         item = self.tabla.focus()
         self.data =self.tabla.item(item)
         self.tematica.set(self.data['text'])
-        self.academia.set(self.data['values'][0])
+        self.academia.set(self.data['values'][2])
         self.prioridad.set(self.data['values'][1])
-        self.descripcion.set(self.data['values'][2])
+        self.descripcion.set(self.data['values'][0])
         self.fecha_inicio.set(self.data['values'][3])
         self.fecha_fin.set(self.data['values'][4])
 
@@ -153,7 +155,7 @@ class Ventana(Frame):
             i=i+1
             self.tabla.insert('', i,text=datos[i][1:2][0], values=datos[i][2:7])
     
-    def actualizar_datos(self):
+    def actualizar_tabla(self):
         item = self.tabla.focus()
         self.data = self.data.item(item)
         nombre = self.tabla['text']
@@ -191,10 +193,10 @@ class Ventana(Frame):
 
 
 
-    if __name__ == "__main__":
-        ventana = Tk()
-        ventana.title('Gestion de formación')
-        ventana.minsize(height= 400, width=600)
-        ventana.geometry('800x500')
-        app = Ventana(ventana)
-        app.mainloop()
+if __name__ == "__main__":
+    ventana = Tk()
+    ventana.title('Gestion de formación')
+    ventana.minsize(height= 400, width=600)
+    ventana.geometry('800x500')
+    app = Ventana(ventana)
+    app.mainloop()
