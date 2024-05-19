@@ -2,81 +2,89 @@
 #Importación de librerías:
 
 import sqlite3
+from tkinter import messagebox as mb
 
 #Definimos ca base de datos:
 
+class BDatos:
 
-class BaseDatos:
-    def __init__(self, codigo, nombre, estado, fecha_fin):
+    def __init__(self, codigo, tematica, academia, prioridad, descripcion, fecha_inicio, fecha_fin_prevista):
         self.codigo = codigo
-        self.nombre = nombre
-        self.estado = estado
-        self.fecha_fin = fecha_fin
+        self.tematica = tematica
+        self.academia = academia
+        self.prioridad = prioridad
+        self.descripcion = descripcion
+        self.fecha_inicio = fecha_inicio
+        self.fecha_fin_prevista = fecha_fin_prevista
+        self.fecha_fin = None  # Inicialmente sin fecha de finalización
 
-    def __str__(self):
-        return f"{self.codigo}. {self.nombre} ({self.estado}) - Fecha fin: {self.fecha_fin}"
+        self.conexion = sqlite3.connect("tareas.db") #Conexion
+        cursor = self.conexion.cursor() # Creamos cursos
+        cursor.execute('''CREATE TABLE IF NOT EXISTS tareas (
+                        codigo INTEGER PRIMARY KEY,
+                        tematica TEXT,
+                        Academia TEXT,
+                        Prioridad TEXT,
+                        Descripcion TEXT,
+                        FechaInicio DATE,
+                        FechaFinPrevista DATE,
+                        FechaFin DATE,
+                    
+                    )''')
+        self.conexion.commit()  # Guardamos los datos
+        cursor.close()
+              
+  #Funciones para interactuar con la base de datos:
 
-    def como_diccionario(self):
-        return {"codigo": self.codigo, "nombre": self.nombre, "estado": self.estado, "fecha_fin": self.fecha_fin}
+    def agregar_tarea(self,tematica, academia, prioridad, descripcion, fecha_inicio, fecha_fin_prevista):
+        try:
+            cursor = self.conexion.cursor() 
+            bd=('''INSERT INTO tareas (tematica, academia, prioridad, descripcion, fecha_inicio, fecha_fin_prevista) VALUES ({},{},{},{},{},{})'''.format
+                (tematica, academia, prioridad, descripcion, fecha_inicio, fecha_fin_prevista))
+            cursor.execute(bd)
+            self.conexion.commit()
+            cursor.close()
+            mb.showinfo("Tarea agregada", "La tarea se ha agregado correctamente")
+        except Exception as e:
+            mb.showerror("Error", f"Error al agregar la tarea: {e}")
 
-#Funciones para interactuar con la base de datos:
+    def obtener_todas_las_tareas(cursor):
+        try:
+            cursor = self.conexion.cursor() 
+            bd=("SELECT * FROM tareas")
+            cursor.execute(bd)
+            datos = cursor.fetchall()
+            return datos
+        except Exception as e:
+            mb.showerror("Error", f"Error al obtener las tareas: {e}")
+           
+     def modificar_tarea(self,codigo,tematica, academia, prioridad, descripcion, fecha_inicio, fecha_fin_prevista):
+        try:
+            cursor = self.conexion.cursor() 
+            bd=('''UPDATE tareas SET tematica = {}, academia = {}, prioridad = {}, descripcion= {}, fecha_inicio= {}, fecha_fin_prevista= {}WHERE codigo = {})'''.format
+                (tematica, academia, prioridad, descripcion, fecha_inicio, fecha_fin_prevista,codigo))
+            cursor.execute(bd)
+            self.conexion.commit()
+            cursor.close()
+            mb.showinfo("Tarea agregada", "La tarea se ha agregado correctamente")
+        except Exception as e:
+            mb.showerror("Error", f"Error al agregar la tarea: {e}")
 
-def conectar_bd():
-    try:
-        conexion = sqlite3.connect("tareas.db") #Conexion
 
-        cursor = conexion.cursor() # Creamos cursosr
-        return conexion, cursor
-    except Exception as e:
-        mb.showerror("Error", f"Error al conectar a la base de datos: {e}")
-        return None, None
-
-def crear_tabla(conexion, cursor):
-    try:
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS tareas (
-                código INTEGER PRIMARY KEY AUTOINCREMENT,
-                nombre TEXT NOT NULL,
-                estado TEXT NOT NULL DEFAULT 'Pendiente',
-                fecha_fin TEXT
-            )
-        """)
-        conexion.commit() # Guardamos los datos
-    except Exception as e:
-        mb.showerror("Error", f"Error al crear la tabla: {e}")
-
-def agregar_tarea(conexion, cursor, nombre, estado, fecha_fin):
-    try:
-        cursor.execute("INSERT INTO tareas (nombre, estado, fecha_fin) VALUES (?, ?, ?)", (nombre, estado, fecha_fin))
-        conexion.commit()
-        mb.showinfo("Tarea agregada", "La tarea se ha agregado correctamente")
-    except Exception as e:
-        mb.showerror("Error", f"Error al agregar la tarea: {e}")
-
-def obtener_todas_las_tareas(cursor):
-    try:
-        cursor.execute("SELECT * FROM tareas")
-        tareas_bd = cursor.fetchall()
-        tareas = []
-        for tarea_bd in tareas_bd:
-            tareas.append(Tarea(*tarea_bd))
-        return tareas
-    except Exception as e:
-        mb.showerror("Error", f"Error al obtener las tareas: {e}")
-        return []
-
-def modificar_estado_tarea(conexion, cursor, codigo, estado):
-    try:
-        cursor.execute("UPDATE tareas SET estado = ? WHERE codigo = ?", (estado, codigo))
-        conexion.commit()
-        mb.showinfo("Tarea modificada", "El estado de la tarea se ha modificado correctamente")
-    except Exception as e:
-        mb.showerror("Error", f"Error al modificar la tarea: {e}")
-
-def eliminar_tarea(conexion, cursor, codigo):
-    try:
-        cursor.execute("DELETE FROM tareas WHERE codigo = ?", (codigo,))
-        conexion.commit()
-        mb.showinfo("Tarea eliminada", "La tarea se ha eliminado correctamente")
-    except Exception as e:
-        mb.showerror("Error", f"Error al eliminar la tarea: {e}")
+    def eliminar_tarea(self, codigo):
+        try:
+            cursor = self.conexion.cursor() 
+            bd=("DELETE FROM tareas WHERE codigo = {}".format (codigo,))
+            cursor.execute(bd)
+            self.conexion.commit()
+            cursor.close()
+            mb.showinfo("Tarea eliminada", "La tarea se ha eliminado correctamente")
+        except Exception as e:
+            mb.showerror("Error", f"Error al eliminar la base de datos: {e}")
+    
+    def cerrar_tabla(self):
+        try:
+            self.conexion.close()
+            mb.showinfo("Conexion cerrada", "La conexion se ha cerrado correctamente")
+        except Exception as e:
+            mb.showerror("Error", f"Error al cerrar la tabla: {e}")

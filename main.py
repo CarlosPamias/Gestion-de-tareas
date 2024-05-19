@@ -1,51 +1,67 @@
 #Importación de librerías:
 
-import tkinter as tk
-from tkinter import messagebox as mb
+from tkinter import Tk, Button, Entry, Label, ttk
+from tkinter import StringVar,Scrollbar, Frame, messagebox
+from BaseDatos import BDatos as Bd
+
+
 
 # Interfaz gráfica con Tkinter:
+class Ventana(Frame):
+    def __init__(self, master):
+        super().__init__(master)
 
-#Creamos una ventana
-ventana = tk.Tk
+        self.codigo = StringVar()
+        self.nombre = StringVar()
+        self.descripcion = StringVar()
+        self.estado = StringVar()
 
-#Redimensionamos la ventana
-ventana.geometry('900x600')
+        self.master.columnconfigure(0, weight=1)
+        self.master.rowconfigure(0,weight=1)
+        self.master.rowconfigure(1,weight=5)
+        self.base_datos = Bd()
 
-#Evitamos redimensionar la ventana
-ventana.resizable(0,0)
+        self.widgets()
 
-#Modificamos el Titulo
-ventana.title('Gestion de tareas')
+    def widgets(self):
+#Creamos el Frame 1 para intorducir los datos y y el frame 2 para seleccionar los datos de la base de datos
+        self.frame_uno = Frame(self.master, bg='white', height=200, width=800)
+        self.frame_uno.grid(column=0, row=0, sticky='nsew')
+        self.frame_dos = Frame(self.master, bg='white', height=300, width=800)
+        self.frame_dos.grid(column=0, row=0, sticky='nsew')
 
+        self.frame_uno.columnconfigure([0,1,2], weight=1)
+        self.frame_uno.rowconfigure([0,1,2,3,4,5], weight=1)
+        self.frame_uno.columnconfigure(0, weight=1)
+        self.frame_dos.rowconfigure(0, weight=1)
 
-#Hacemos visible la ventana
-ventana.mainloop()
-
-
-
-def actualizar_lista_tareas():
-    tareas = obtener_todas_las_tareas(cursor)
-    lista_tareas.delete(0, tk.END)
-    for tarea in tareas:
-        lista_tareas.insert(tk.END, tarea)
-
-
-def agregar_tarea():
-    nombre = ventana_agregar_tarea.entry_nombre.get()
-    estado = ventana_agregar_tarea.var_estado.get()
-    fecha_fin = ventana_agregar_tarea.entry_fecha_fin.get()
-
-    if not nombre or not fecha_fin:
-        mb.showwarning("Error", "Debes completar todos los campos")
-        return
-
-    agregar_tarea(conexion, cursor, nombre, estado, fecha_fin)
-    actualizar_lista_tareas()
-    ventana_agregar_tarea.destroy()
+#Definimos las etiquetas y los botones
+        Label(self.frame_uno, text='Opciones', bg='white', fg= 'black',
+             font= ('Kaufmann BT','13','bold')).grid(column=2, row=0)
+        Button(self.frame_uno, text='REFRESCAR', font= ('Arial', 9, 'bold'), comand=self.actualizar_tabla,
+               fg='black', bg= 'white', width=20,bd=3).grid(column=2, row=1, pady=5)
 
 
-def marcar_completada():
-    try:
-        indice = lista_tareas.curselection()[0]
-        codigo = tareas[indice].codigo
+        Label(self.frame_uno, text='Agregar y actualizad datos', bg='white', fg='black',
+            font=('Kaufmann BT', '13', 'bold')).grid(columnspan=2,column=0,row=0,pady=5)
+        Label(self.frame_uno, text= 'Tematica', fg='black',bg= 'white',
+            font=('Rockwell',13,'bols')).grid(column=0,row=1,pady=5)
 
+#creamos las cajas de entrada de la informacion
+        Entry(self.frame_uno, textvariable=self.tematica, font=('Comic Sans MS', 12),
+              highlightbackground='white',highlightthickness=5).grid(colum=1,row=1)
+
+#creamos los botones para ejecutar acciones
+        Button(self.frame_uno,text= 'Añadir datos', font=('arial', 9, 'bold'),bg='white',
+               width=20,bd=3,command = self.agregardatos).grid (column=2, row=2, pady=5,padx=5)
+
+#Creamos un estilo de tabla para mostrar la información
+        self.tabla[columnas]= ()
+
+    if __name__ == "__main__":
+        ventana = Tk()
+        ventana.title('Gestion de formación')
+        ventana.minsize(height= 400, width=600)
+        ventana.geometry('800x500')
+        app = Ventana(ventana)
+        app.mainloop()
