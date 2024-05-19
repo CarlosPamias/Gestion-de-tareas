@@ -18,8 +18,8 @@ class BDatos:
     def agregar_tarea(self,tematica, academia, prioridad, descripcion, fecha_inicio, fecha_fin_prevista,fecha_fin):
         try:
             cursor = self.conexion.cursor() 
-            bd=('''INSERT INTO tareas (tematica, academia, prioridad, descripcion, fecha_inicio, fecha_fin_prevista,fecha_fin) VALUES ({},{},{},{},{},{},{})'''.format
-                (tematica, academia, prioridad, descripcion, fecha_inicio, fecha_fin_prevista,fecha_fin))
+            bd=('''INSERT INTO tareas (descripcion, tematica, academia, prioridad, fecha_inicio, fecha_fin) VALUES ({},{},{},{},{},{})'''.format
+                (descripcion, tematica, academia, prioridad, fecha_inicio, fecha_fin_prevista,fecha_fin))
             cursor.execute(bd)
             self.conexion.commit()
             cursor.close()
@@ -37,11 +37,11 @@ class BDatos:
         except Exception as e:
             mb.showerror("Error", f"Error al obtener las tareas: {e}")
            
-    def modificar_tarea(self,codigo,tematica, academia, prioridad, descripcion, fecha_inicio, fecha_fin_prevista,fecha_fin):
+    def modificar_tarea(self,descripcion, codigo,tematica, academia, prioridad, fecha_inicio, fecha_fin_prevista,fecha_fin):
         try:
             cursor = self.conexion.cursor() 
-            bd=('''UPDATE tareas SET tematica = {}, academia = {}, prioridad = {}, descripcion= {}, fecha_inicio= {}, fecha_fin_prevista= {},fecha_fin ={} WHERE codigo = {})'''.format
-                (tematica, academia, prioridad, descripcion, fecha_inicio, fecha_fin_prevista,fecha_fin,codigo))
+            bd=('''UPDATE tareas SET descripcion= {}, tematica = {}, academia = {}, prioridad = {}, fecha_inicio= {}, fecha_fin_prevista= {},fecha_fin ={} WHERE codigo = {})'''.format
+                (descripcion,tematica, academia, prioridad, fecha_inicio, fecha_fin_prevista,fecha_fin,codigo))
             cursor.execute(bd)
             datos = cursor.rowcount
             self.conexion.commit()
