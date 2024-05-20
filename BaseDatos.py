@@ -15,7 +15,7 @@ class BDatos:
               
   #Funciones para interactuar con la base de datos:
 
-    def agregar_tarea(self,descripcion,tematica, academia, prioridad,  fecha_inicio,fecha_fin):
+    def agregar_tarea(self,descripcion,tematica, academia, prioridad,fecha_inicio,fecha_fin):
         try:
             cursor = self.conexion.cursor() 
             bd=('''INSERT INTO tareas (descripcion, tematica, academia, prioridad, fecha_inicio, fecha_fin) VALUES ({},{},{},{},{},{})'''.format
