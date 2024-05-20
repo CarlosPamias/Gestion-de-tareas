@@ -6,10 +6,68 @@ from BaseDatos import BDatos as Bd
 
 
 # Interfaz gráfica con Tkinter:
-class Product(Frame):
-    def __init__(self, master):
-        super().__init__( master)
-       
+class App(Tk):
+    
+    COLOR_VENTANA = '#1d2d44'
+
+    def __init__(self):
+        super().__init__()
+
+# Configuramos la ventana
+        self.config_ventana()
+# configuramos el Grid
+        self.conf_grid()
+# Mostramos las ventana
+        self.mostrar_ventana
+#Mostramos el titulo   
+        self.mostrar_titulo    
+# Mostramos formulario 
+        self.mostrar_formulario()
+#Mostramos la tabla de la tabla
+        self.mostrar_tabla()
+
+    def conf_grid(self):
+        self.columnconfigure(0, weight=1)
+        self.columnconfigure(1, weight=1)
+      
+
+    def config_ventana(self):  
+        self.title('Gestion de proyectos')
+        self.minsize(height=800, width=600)
+        self.geometry('900x600')
+        self.configure(background=App.COLOR_VENTANA)
+# Aplicamos estilo
+        self.estilos = ttk.Style()
+        self.estilos.theme_use('calm')
+        self.estilos.configure(self,
+                               background=App.COLOR_VENTANA,
+                               foreground='white',
+                               fieldbackground='black')
+
+    def mostrar_titulo(self):
+        etiqueta = ttk.Label(self, text='Gestion de proyectos', font=('Arial',30), 
+                             background=App.COLOR_VENTANA, foreground='white')
+        etiqueta.grid(row=0, column=0, columnspan=2, pady=30)
+
+    def mostrar_formulario(self):
+        pass
+    
+    def mostrar_tabla(self):
+        #Creamos un frame para mostrar la tabla de la tab
+        self.frame_tabla = ttk.Frame(self)
+        self.estilos.configure('Treeview', background='black' foreground='white',
+                               fi)
+ 
+        
+    def conf_grid(self):
+
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(0,weight=1)
+        self.rowconfigure(1,weight=5)
+        self.Bd = Bd()
+
+    def mostrar_ventana(self):
+
         self.descripcion = StringVar()
         self.tematica = StringVar()
         self.academia = StringVar()
@@ -17,15 +75,6 @@ class Product(Frame):
         self.fecha_inicio = StringVar()
         self.fecha_fin =  StringVar()
 
-#       Adaptamos la pantalla
-        self.master.columnconfigure(0, weight=1)
-        self.master.rowconfigure(0,weight=1)
-        self.master.rowconfigure(1,weight=5)
-        self.Bd = Bd()
-
-        self.widgets()
-
-    def widgets(self):
 #Creamos el Frame 1 para intorducir los datos y y el frame 2 para seleccionar los datos de la base de datos
         self.frame_uno = Frame(self.master,bg='white', height=200, width=800)
         self.frame_uno.grid(column=0, row=0, sticky='nsew')
@@ -187,11 +236,9 @@ class Product(Frame):
         self.fecha_inicio.set('')
         self.fecha_fin.set('')
 
-if __name__ == "__main__":
-    ventana = Tk()
-    ventana.title('Gestion de proyectos')
-    ventana.minsize(height=400, width=600)
-    ventana.geometry('800x600')
-    aplication = Product(ventana)
-    aplication.mainloop()        
-   
+ 
+           
+
+if __name__ == '__main__': 
+    app = App()
+    app.mainloop()
