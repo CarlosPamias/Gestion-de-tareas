@@ -4,7 +4,7 @@ import tkinter as Tk
 from tkinter import ttk
 from tkinter.messagebox import showerror, showinfo
 
-from Proyecto import proyecto
+from proyecto import Proyecto
 from BaseDatos import BDatos
 
 
@@ -165,11 +165,11 @@ class App(Tk.Tk):
 
         # Validamos el valor del self.id_cliente
         if self.codigo is None:  # Insertar
-            proyecto = BDatos(descripcion=descripcion, tematica=tematica, academia=academia, prioridad=prioridad, fecha_inicio=fecha_inicio, fecha_fin=fecha_fin)
+            proyecto = Proyecto(descripcion=descripcion, tematica=tematica, academia=academia, prioridad=prioridad, fecha_inicio=fecha_inicio, fecha_fin=fecha_fin)
             BDatos.insertar(proyecto)
             showinfo(title='Agregar', message='Proyecto agregado...')
         else:  # Actualizar
-            proyecto = BDatos(self.codigo, descripcion, tematica, academia, prioridad, fecha_inicio, fecha_fin)
+            proyecto = Proyecto(self.codigo, descripcion, tematica, academia, prioridad, fecha_inicio, fecha_fin)
         BDatos.actualizar(proyecto)
         showinfo(title='Actualizar', message='Protecto actualizado...')
         # Volvemos a mostrar los datos
@@ -220,14 +220,13 @@ class App(Tk.Tk):
             showerror(title='Antencion',
                      message='Debe seleccionar un proyecto a eliminar')
         else:
-            proyecto = proyecto(id=self.codigo)
+            proyecto = Proyecto(id=self.codigo)
             BDatos.eliminar(proyecto)
             showinfo(title='Eliminado', message='Proyecto eliminado...')
             self.recargar_datos()
 
 
- 
-          
+         
 
 if __name__ == '__main__': 
     app = App()

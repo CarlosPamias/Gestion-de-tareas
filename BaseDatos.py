@@ -1,7 +1,7 @@
 
 #Importación de librerías:
 
-from Proyecto import proyecto
+from proyecto import Proyecto
 from Conexion import Conexion
 from tkinter import messagebox as mb
 
@@ -26,10 +26,10 @@ class BDatos:
             # Mapeo de clase-tabla cliente
             proyectos = []
             for registro in registros:
-                Proyecto = proyecto(registro[0], registro[1],
+                proyecto = Proyecto(registro[0], registro[1],
                                   registro[2], registro[3],
                                   registro[4], registro[5],registro[6])
-                proyectos.append(Proyecto)
+                proyectos.append(proyecto)
             return proyectos
         except Exception as e:
             mb.showerror('Error', message='Ocurrio un error al seleccionar clientes')
@@ -93,6 +93,6 @@ class BDatos:
 
 if __name__ == '__main__':
 
-    proyectos = proyecto.seleccionar()
+    proyectos = Proyecto.seleccionar()
     for proyecto in proyectos:
         print(proyecto)
