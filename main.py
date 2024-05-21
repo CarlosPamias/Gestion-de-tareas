@@ -11,7 +11,7 @@ from BaseDatos import BDatos
 # Interfaz gráfica con Tkinter:
 class App(Tk.Tk):
     
-    COLOR_VENTANA = '#1d2d44'
+    COLOR_VENTANA = '#DBDFDF'
 
     def __init__(self):
         super().__init__()
@@ -19,70 +19,71 @@ class App(Tk.Tk):
         self.codigo = None
         self.config_ventana()
         self.conf_grid()
-      
-#Mostramos el titulo   
         self.mostrar_titulo()    
-# Mostramos formulario 
         self.mostrar_formulario()
-#Mostramos la tabla de la tabla
         self.cargar_tabla()
-#Nostramos los bortones
         self.mostrar_botones()
 
-    def conf_grid(self):
-        self.columnconfigure(0, weight=1)
-        self.columnconfigure(1, weight=1)
-      
+ 
     def config_ventana(self):  
         self.title('Gestion de proyectos')
-        self.minsize(height=800, width=600)
-        self.geometry('900x600')
+        self.geometry('1300x750')
         self.configure(background=App.COLOR_VENTANA)
+        self.resizable(0,0)
 # Aplicamos estilo
         self.estilos = ttk.Style()
-        self.estilos.theme_use('clam')
-        self.estilos.configure(self,
-                               background=App.COLOR_VENTANA,
-                               foreground='white',
-                               fieldbackground='black')
+        self.estilos.theme_use('alt')
+        self.estilos.configure(self, background=App.COLOR_VENTANA,
+                               foreground='black',
+                               fieldbackground='white')
+        
+    
+    def conf_grid(self):
+        self.columnconfigure(0, weight=2)
+        self.columnconfigure(1, weight=1)
+      
 
     def mostrar_titulo(self):
-        etiqueta = ttk.Label(self, text='Gestion de proyectos', font=('Arial',30), 
-                             background=App.COLOR_VENTANA, foreground='white')
+        etiqueta = ttk.Label(self, text='Gestion de proyectos', font=('Algerian',35), 
+                             background=App.COLOR_VENTANA, foreground='black')
         etiqueta.grid(row=0, column=0, columnspan=2, pady=30)
 
+
+
     def mostrar_formulario(self):
+
         self.frame_f = ttk.Frame()
+
         #Descripcion
-        descripcion_l = ttk.Label(self.frame_f,text='Descripcion')
-        descripcion_l.grid(row=0, column=0, sticky=Tk.W, pady=30,padx=5)
+        descripcion_l = ttk.Label(self.frame_f,text='Descripcion:',font=('Arial',12))
+        descripcion_l.grid(row=1, column=0, sticky=Tk.W, pady=10,padx=5)
         self.descripcion_t = ttk.Entry(self.frame_f)
-        self.descripcion_t.grid(row=0, column=1,)
+        self.descripcion_t.grid(row=1, column=1,)
         #tematica
-        tematica_l = ttk.Label(self.frame_f,text='tematica')
-        tematica_l.grid(row=1, column=0, sticky=Tk.W, pady=30,padx=5)
+        tematica_l = ttk.Label(self.frame_f,text='Tematica:',font=('Arial',12))
+        tematica_l.grid(row=2, column=0, sticky=Tk.W, pady=10,padx=5)
         self.tematica_t = ttk.Entry(self.frame_f)
-        self.tematica_t.grid(row=1, column=1,)
+        self.tematica_t.grid(row=2, column=1,)
          #academia
-        academia_l = ttk.Label(self.frame_f,text='academia')
-        academia_l.grid(row=2, column=0, sticky=Tk.W, pady=30,padx=5)
+        academia_l = ttk.Label(self.frame_f,text='Academia:',font=('Arial',12))
+        academia_l.grid(row=3, column=0, sticky=Tk.W, pady=10,padx=5)
         self.academia_t = ttk.Entry(self.frame_f)
-        self.academia_t.grid(row=2, column=1,)
+        self.academia_t.grid(row=3, column=1,)
          #prioridad
-        prioridad_l = ttk.Label(self.frame_f,text='prioridad')
-        prioridad_l.grid(row=3, column=0, sticky=Tk.W, pady=30,padx=5)
+        prioridad_l = ttk.Label(self.frame_f,text='Prioridad:',font=('Arial',12))
+        prioridad_l.grid(row=4, column=0, sticky=Tk.W, pady=10,padx=5)
         self.prioridad_t = ttk.Entry(self.frame_f)
-        self.prioridad_t.grid(row=3, column=1,)
+        self.prioridad_t.grid(row=4, column=1,)
           #Fecha inicio
-        fecha_inicio_l = ttk.Label(self.frame_f,text='Fecha desde')
-        fecha_inicio_l.grid(row=4, column=0, sticky=Tk.W, pady=30,padx=5)
+        fecha_inicio_l = ttk.Label(self.frame_f,text='Fecha desde:',font=('Arial',12))
+        fecha_inicio_l.grid(row=5, column=0, sticky=Tk.W, pady=10,padx=5)
         self.fecha_inicio_t = ttk.Entry(self.frame_f)
-        self.fecha_inicio_t.grid(row=4, column=1,)
+        self.fecha_inicio_t.grid(row=5, column=1,)
           #Fecha inicio
-        fecha_fin_l = ttk.Label(self.frame_f,text='Fecha fin')
-        fecha_fin_l.grid(row=5, column=0, sticky=Tk.W, pady=30,padx=5)
+        fecha_fin_l = ttk.Label(self.frame_f,text='Fecha fin:',font=('Arial',12))
+        fecha_fin_l.grid(row=6, column=0, sticky=Tk.W, pady=10,padx=5)
         self.fecha_fin_t = ttk.Entry(self.frame_f)
-        self.fecha_fin_t.grid(row=5, column=1,)
+        self.fecha_fin_t.grid(row=6, column=1,)
 
     #Publicamos el Frame
         self.frame_f.grid(row=1, column=0)
@@ -92,27 +93,30 @@ class App(Tk.Tk):
         self.frame_tabla = ttk.Frame(self)
         # Definimos los estilos de la tabla 
         self.estilos.configure('Treeview', background='black', foreground='white',
-                               fieldbackground='black',rowheight=30)
-        columnas = ('Descripcion','Tematica''Academia','Prioridad','Fecha inicio','Fecha fin')
+                               fieldbackground='black',rowheight=25)
+        columnas = ('Codigo', 'Descripcion','Tematica','Academia','Prioridad','Fecha inicio','Fecha fin')
         # Creamos el objeto tabla
-        self.tabla = ttk.Treeview(self.frame_tabla, columnas=columnas,show='headings')
+        self.tabla = ttk.Treeview(self.frame_tabla, columns=columnas,show='headings')
         
         #DEFINIMOS LAS CABEZERAS
-        self.tabla.heading('Descripcion', text= 'Descripción',anchor=Tk.CENTER)
-        self.tabla.heading('Tematica', text= 'Tematica',anchor=Tk.W)
-        self.tabla.heading('Academia', text= 'Academia',anchor=Tk.W)
-        self.tabla.heading('Prioridad', text= 'Prioridad',anchor=Tk.CENTER)
-        self.tabla.heading('Fecha inicio', text= 'Fecha inicio',anchor=Tk.CENTER)
-        self.tabla.heading('Fecha fin', text= 'Fecha fin',anchor=Tk.CENTER)
+        self.tabla.heading('Codigo', text= 'Codigo',anchor=Tk.N)
+        self.tabla.heading('Descripcion', text= 'Descripción',anchor=Tk.NW)
+        self.tabla.heading('Tematica', text= 'Tematica',anchor=Tk.NW)
+        self.tabla.heading('Academia', text= 'Academia',anchor=Tk.NW)
+        self.tabla.heading('Prioridad', text= 'Prioridad',anchor=Tk.NW)
+        self.tabla.heading('Fecha inicio', text= 'Fecha inicio',anchor=Tk.N)
+        self.tabla.heading('Fecha fin', text= 'Fecha fin',anchor=Tk.N)
         
         #Definimos las columnas
-        self.tabla.column('Descripcion', anchor=Tk.CENTER, width=180)
-        self.tabla.column('Tematica', anchor=Tk.W, width=120)
-        self.tabla.column('Academia', anchor=Tk.W, width=120)
-        self.tabla.column('Prioridad', anchor=Tk.CENTER, width=80)
-        self.tabla.column('Fecha inicio', anchor=Tk.CENTER, width=80)
-        self.tabla.column('Fecha fin', anchor=Tk.CENTER, width=80)
+        self.tabla.column('Codigo', anchor=Tk.N, width=60)
+        self.tabla.column('Descripcion', anchor=Tk.NW, width=250)
+        self.tabla.column('Tematica', anchor=Tk.NW, width=120)
+        self.tabla.column('Academia', anchor=Tk.NW, width=120)
+        self.tabla.column('Prioridad', anchor=Tk.N, width=80)
+        self.tabla.column('Fecha inicio', anchor=Tk.N, width=80)
+        self.tabla.column('Fecha fin', anchor=Tk.N, width=80)
 
+        # Cargar los datos de la BD
         proyectos = BDatos.seleccionar()
         for c in proyectos:
             self.tabla.insert(parent='',
@@ -120,21 +124,24 @@ class App(Tk.Tk):
                         values=(c.codigo, c.descripcion, c.tematica, c.academia, c.prioridad, c.fecha_inicio, c.fecha_fin))
 
         # Agregamos el ScrollBar
-        scrollbar = ttk.ScrollBar(self.frame_tabla, orient=Tk.VERTICAL, command=self.tabla.yview)
+        scrollbar = ttk.Scrollbar(self.frame_tabla, orient=Tk.VERTICAL, command=self.tabla.yview)
         self.tabla.configure(yscroll=scrollbar.set)
         scrollbar.grid(row=0,column=1,sticky=Tk.NS)
 
         #Mostramos la tabla de la tabla
         self.tabla.grid(row=0, column=0)
+            # Asociamos el evento select
+        self.tabla.bind('<<TreeviewSelect>>', self.cargar_cliente)
+        # Mostramos el frame
         self.frame_tabla.grid(row=1, column=1, padx=30)
- 
+         
     def mostrar_botones(self):
         self.frame_b = ttk.Frame()
         #Creamos los botones
-        agregar_b = ttk.Button(self.frame_b, text='Guardar',command=self.agregar_datos)
+        agregar_b = ttk.Button(self.frame_b, text='Guardar',command=self.guardar_proyecto)
         agregar_b.grid(row=0, column=0, padx=30)
 
-        eliminar_b = ttk.Button(self.frame_b, text='Eliminar',command=self.eliminar_datos)
+        eliminar_b = ttk.Button(self.frame_b, text='Eliminar',command=self.eliminar_proyecto)
         eliminar_b.grid(row=0, column=1, padx=30)
 
         limpiar_b = ttk.Button(self.frame_b, text='Limpiar',command=self.limpiar_datos)
@@ -144,17 +151,17 @@ class App(Tk.Tk):
         self.estilos.configure('TButton', background='#005f73')
         self.estilos.map('TButton', background=[('active', '#0a9396')])
         #Piblicamos el Frame
-        self.frame_b.grid(row=0, column=2,columnspan=2 ,pady=40)
+        self.frame_b.grid(row=2, column=0,columnspan=2 ,pady=30)
  
-        def agregar_datos(self):
+    def agregar_datos(self):
         # Validamos los campos
-            if (self.descripcion_t.get() and self.tematica_t.get()
+        if (self.descripcion_t.get() and self.tematica_t.get()
             and self.academia_t.get()):
-                showerror(title='Atencion', message='Debe llenar el formulario')
-                self.descripcion_t.focus_set()
+            showerror(title='Atencion', message='Debe llenar el formulario')
+            self.descripcion_t.focus_set()
 
     
-    def guardar_cliente(self):
+    def guardar_proyecto(self):
         # Recuperar los valores de las cajas de texto
         descripcion = self.descripcion_t.get()
         tematica = self.tematica_t.get()
@@ -170,8 +177,8 @@ class App(Tk.Tk):
             showinfo(title='Agregar', message='Proyecto agregado...')
         else:  # Actualizar
             proyecto = Proyecto(self.codigo, descripcion, tematica, academia, prioridad, fecha_inicio, fecha_fin)
-        BDatos.actualizar(proyecto)
-        showinfo(title='Actualizar', message='Protecto actualizado...')
+            BDatos.actualizar(proyecto)
+            showinfo(title='Actualizar', message='Protecto actualizado...')
         # Volvemos a mostrar los datos
         self.recargar_datos()
 
@@ -215,14 +222,14 @@ class App(Tk.Tk):
         self.fecha_inicio_t.delete(0, Tk.END)
         self.fecha_fin_t.delete(0, Tk.END)
 
-    def eliminar_cliente(self):
+    def eliminar_proyecto(self):
         if self.codigo is None:
             showerror(title='Antencion',
                      message='Debe seleccionar un proyecto a eliminar')
         else:
-            proyecto = Proyecto(id=self.codigo)
+            proyecto = Proyecto(codigo=self.codigo)
             BDatos.eliminar(proyecto)
-            showinfo(title='Eliminado', message='Proyecto eliminado...')
+        #    showinfo(title='Eliminado', message='Proyecto eliminado...')
             self.recargar_datos()
 
 
