@@ -1,63 +1,98 @@
 
 #Importación de librerías:
 
-import sqlite3
+from Proyecto import proyecto
+from Conexion import Conexion
 from tkinter import messagebox as mb
 
-#Definimos ca base de datos:
+
+
+
 
 class BDatos:
+    SELECCIONAR = 'SELECT * FROM proyecto'
+    INSERTAR = 'INSERT INTO proyecto(descripcion,tematica,academia,prioridad,fecha_inicio,fecha_fin) VALUES(%s, %s, %s,%s, %s, %s)'
+    ACTUALIZAR = 'UPDATE proyecto SET descripcion=%s, tematica=%s, academia=%s,prioridad=%s, fecha_inicio=%s, fecha_fin=%s WHERE id=%s'
+    ELIMINAR = 'DELETE FROM proyecto WHERE id=%s'
 
-#Inicializamos la tabla
-    def __init__(self,):
-        self.conexion = sqlite3.connect("tareas.db") #Conexion
-      
-              
-  #Funciones para interactuar con la base de datos:
-
-    def agregar_tarea(self,descripcion,tematica, academia, prioridad,fecha_inicio,fecha_fin):
+    @classmethod
+    def seleccionar(cls):
+        conexion = None
         try:
-            cursor = self.conexion.cursor() 
-            bd=('''INSERT INTO tareas (descripcion, tematica, academia, prioridad, fecha_inicio, fecha_fin) VALUES ({},{},{},{},{},{})'''.format
-                (descripcion, tematica, academia, prioridad, fecha_inicio, fecha_fin))
-            cursor.execute(bd)
-            self.conexion.commit()
-            cursor.close()
+            conexion = Conexion.obtener_conexion()
+            cursor = conexion.cursor()
+            cursor.execute(cls.SELECCIONAR)
+            registros = cursor.fetchall()
+            # Mapeo de clase-tabla cliente
+            proyectos = []
+            for registro in registros:
+                Proyecto = proyecto(registro[0], registro[1],
+                                  registro[2], registro[3],
+                                  registro[4], registro[5],registro[6])
+                proyectos.append(Proyecto)
+            return proyectos
         except Exception as e:
-            mb.showerror("Error", f"Error al agregar la tarea: {e}")
+            mb.showerror('Error', message='Ocurrio un error al seleccionar clientes')
+        finally:
+            if conexion is not None:
+                cursor.close()
+                Conexion.liberar_conexion(conexion)
 
-    def obtener_todas_las_tareas(self):
+    @classmethod
+    def insertar(cls, proyec):
+        conexion = None
         try:
-            cursor = self.conexion.cursor() 
-            bd=("SELECT * FROM tareas")
-            cursor.execute(bd)
-            datos = cursor.fetchall()
-            return datos
+            conexion = Conexion.obtener_conexion()
+            cursor = conexion.cursor()
+            valores = (proyec.descripcion, proyec.tematica,proyec.academia,proyec.prioridad,proyec.fecha_inicio,proyec.fecha_fin)
+            cursor.execute(cls.INSERTAR, valores)
+            conexion.commit()
+            return cursor.rowcount
         except Exception as e:
-            mb.showerror("Error", f"Error al obtener las tareas: {e}")
-           
-    def modificar_tarea(self,descripcion, codigo,tematica, academia, prioridad, fecha_inicio, fecha_fin):
-        try:
-            cursor = self.conexion.cursor() 
-            bd=('''UPDATE tareas SET descripcion= {}, tematica = {}, academia = {}, prioridad = {}, fecha_inicio= {}, fecha_fin ={} WHERE codigo = {})'''.format
-                (descripcion,tematica, academia, prioridad, fecha_inicio,fecha_fin,codigo))
-            cursor.execute(bd)
-            datos = cursor.rowcount
-            self.conexion.commit()
-            cursor.close()
-            return datos
-        except Exception as e:
-            mb.showerror("Error", f"Error al agregar la tarea: {e}")
+             mb.showerror('Error', message='Ocurrio un error al insertar clientes')
+        finally:
+            if conexion is not None:
+                cursor.close()
+                Conexion.liberar_conexion(conexion)
 
-
-    def eliminar_tarea(self, codigo):
+    @classmethod
+    def actualizar(cls, proyec):
+        conexion = None
         try:
-            cursor = self.conexion.cursor() 
-            bd=("DELETE FROM tareas WHERE codigo = {}".format (codigo))
-            cursor.execute(bd)
-            self.conexion.commit()
-            cursor.close()
+            conexion = Conexion.obtener_conexion()
+            cursor = conexion.cursor()
+            valores = (proyec.descripcion, proyec.tematica,proyec.academia,proyec.prioridad,proyec.fecha_inicio,proyec.fecha_fin)
+                     
+            cursor.execute(cls.ACTUALIZAR, valores)
+            conexion.commit()
+            return cursor.rowcount
+
         except Exception as e:
-            mb.showerror("Error", f"Error al eliminar la base de datos: {e}")
-    
-   
+            mb.showerror('Error', message='Ocurrio un error al actualizar clientes')
+        finally:
+            if conexion is not None:
+                cursor.close()
+                Conexion.liberar_conexion(conexion)
+
+    @classmethod
+    def eliminar(cls, proyec):
+        conexion = None
+        try:
+            conexion = Conexion.obtener_conexion()
+            cursor = conexion.cursor()
+            valores = (proyec.id,)
+            cursor.execute(cls.ELIMINAR, valores)
+            conexion.commit()
+            return cursor.rowcount
+        except Exception as e:
+            mb.showerror('Error', message='Ocurrio un error al borrar clientes')
+        finally:
+            if conexion is not None:
+                cursor.close()
+                Conexion.liberar_conexion(conexion)
+
+if __name__ == '__main__':
+
+    proyectos = proyecto.seleccionar()
+    for proyecto in proyectos:
+        print(proyecto)
