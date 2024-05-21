@@ -208,12 +208,12 @@ class App(Tk.Tk):
         self.codigo = None
 
     def limpiar_formulario(self):
-        self.descripcion_t.delete(0, tk.END)
-        self.tematica_t.delete(0, tk.END)
-        self.academia_t.delete(0, tk.END)
-        self.prioridad_t.delete(0, tk.END)
-        self.fecha_inicio_t.delete(0, tk.END)
-        self.fecha_fin_t.delete(0, tk.END)
+        self.descripcion_t.delete(0, Tk.END)
+        self.tematica_t.delete(0, Tk.END)
+        self.academia_t.delete(0, Tk.END)
+        self.prioridad_t.delete(0, Tk.END)
+        self.fecha_inicio_t.delete(0, Tk.END)
+        self.fecha_fin_t.delete(0, Tk.END)
 
     def eliminar_cliente(self):
         if self.codigo is None:
